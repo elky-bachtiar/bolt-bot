@@ -22,11 +22,8 @@ export function setupSecurityPolicies(window: BrowserWindow): void {
     });
   });
 
-  // Disable node integration in renderer
-  window.webContents.on('new-window', (event, navigationUrl) => {
-    event.preventDefault();
-  });
-
+  // Note: New window handling is now managed in main.ts using setWindowOpenHandler
+  
   // Prevent navigation to external URLs
   window.webContents.on('will-navigate', (event, navigationUrl) => {
     const parsedUrl = new URL(navigationUrl);

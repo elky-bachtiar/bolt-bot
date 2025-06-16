@@ -23,7 +23,6 @@ async function createMainWindow(): Promise<BrowserWindow> {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      enableRemoteModule: false,
       preload: path.join(__dirname, 'preload.js'),
       webSecurity: true,
       allowRunningInsecureContent: false,
@@ -163,11 +162,10 @@ app.on('activate', async () => {
 
 // Security: Prevent new window creation
 app.on('web-contents-created', (_, contents) => {
-  contents.on('new-window', (navigationEvent) => {
-    navigationEvent.preventDefault();
-  });
-
-  contents.setWindowOpenHandler(() => {
+  // Handle new window creation with the modern API
+  contents.setWindowOpenHandler(({ url }) => {
+    // Optionally, you can handle specific URLs here
+    // For now, we'll just prevent all new windows
     return { action: 'deny' };
   });
 });

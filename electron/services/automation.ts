@@ -29,9 +29,11 @@ class AutomationService {
 
       const page = await browser.newPage();
       
-      // Set user agent and viewport
+      // Set viewport and user agent through context options
       await page.setViewportSize({ width: 1920, height: 1080 });
-      await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+      await page.setExtraHTTPHeaders({
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      });
 
       // Navigate to Bolt.new
       await page.goto('https://bolt.new', { waitUntil: 'networkidle' });
@@ -86,8 +88,8 @@ class AutomationService {
       const chatInput = await page.locator('[data-testid="chat-input"], textarea, input[type="text"]').first();
       
       // Clear existing content and type the command
-      await chatInput.click();
-      await page.keyboard.selectAll();
+      await chatInput.click({ clickCount: 3 }); // Triple click to select all
+      await page.keyboard.press('Backspace'); // Clear selection
       await chatInput.fill(command);
 
       // Submit the command

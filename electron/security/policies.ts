@@ -1,8 +1,10 @@
 import { BrowserWindow, session } from 'electron';
+import type { Session } from 'electron';
 
 export function setupSecurityPolicies(window: BrowserWindow): void {
   // Content Security Policy
-  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+  const ses = session.defaultSession;
+  ses.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
@@ -22,9 +24,10 @@ export function setupSecurityPolicies(window: BrowserWindow): void {
     });
   });
 
-  // Disable node integration in renderer
-  window.webContents.on('new-window', (event, navigationUrl) => {
-    event.preventDefault();
+  // Handle new window creation
+  window.webContents.setWindowOpenHandler(({ url }) => {
+    // Prevent all new windows
+    return { action: 'deny' };
   });
 
   // Prevent navigation to external URLs

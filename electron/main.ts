@@ -23,11 +23,12 @@ async function createMainWindow(): Promise<BrowserWindow> {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      enableRemoteModule: false,
+      sandbox: true,
       preload: path.join(__dirname, 'preload.js'),
       webSecurity: true,
       allowRunningInsecureContent: false,
-      experimentalFeatures: false
+      experimentalFeatures: false,
+      webviewTag: false
     },
     icon: process.platform === 'linux' ? path.join(__dirname, '../assets/icon.png') : undefined
   });
@@ -163,8 +164,10 @@ app.on('activate', async () => {
 
 // Security: Prevent new window creation
 app.on('web-contents-created', (_, contents) => {
-  contents.on('new-window', (navigationEvent) => {
-    navigationEvent.preventDefault();
+  // new-window event is deprecated in newer Electron versions
+  // Using will-navigate instead which serves a similar purpose
+  contents.on('will-navigate', (event) => {
+    event.preventDefault();
   });
 
   contents.setWindowOpenHandler(() => {

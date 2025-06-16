@@ -1,15 +1,18 @@
-import React from 'react';
-import { useToast } from '../../hooks/useToast';
-import { Toast } from './Toast';
+import { Toaster as SonnerToaster } from 'sonner';
 
 export function Toaster() {
-  const { toasts } = useToast();
-
   return (
-    <div className="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]">
-      {toasts.map((toast) => (
-        <Toast key={toast.id} {...toast} />
-      ))}
-    </div>
+    <SonnerToaster
+      position="top-right"
+      toastOptions={{
+        unstyled: false,
+        classNames: {
+          toast: 'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border flex items-center gap-4 border p-4',
+          description: 'group-[.toast]:text-muted-foreground',
+          actionButton: 'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
+          cancelButton: 'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
+        },
+      }}
+    />
   );
 }

@@ -39,7 +39,7 @@ export function KeyManagement() {
         addToast({
           title: 'Error',
           description: 'Failed to load API keys',
-          variant: 'destructive'
+          variant: 'error'
         });
       }
     } catch (error) {
@@ -47,7 +47,7 @@ export function KeyManagement() {
       addToast({
         title: 'Error',
         description: 'Failed to load API keys',
-        variant: 'destructive'
+        variant: 'error'
       });
     } finally {
       setIsLoading(false);
@@ -87,8 +87,8 @@ export function KeyManagement() {
       console.error('Failed to add key:', error);
       addToast({
         title: 'Error',
-        description: 'Failed to store API key',
-        variant: 'destructive'
+        description: 'Failed to add API key',
+        variant: 'error'
       });
     } finally {
       setIsAddingKey(false);
@@ -102,14 +102,15 @@ export function KeyManagement() {
       if (result.success) {
         addToast({
           title: 'Success',
-          description: 'API key deleted'
+          description: 'API key deleted',
+          variant: 'success'
         });
         await loadKeys();
       } else {
         addToast({
           title: 'Error',
           description: 'Failed to delete API key',
-          variant: 'destructive'
+          variant: 'error'
         });
       }
     } catch (error) {
@@ -117,7 +118,7 @@ export function KeyManagement() {
       addToast({
         title: 'Error',
         description: 'Failed to delete API key',
-        variant: 'destructive'
+        variant: 'error'
       });
     }
   };
@@ -132,14 +133,15 @@ export function KeyManagement() {
       if (result.success) {
         addToast({
           title: 'Success',
-          description: 'API key rotated successfully'
+          description: 'API key rotated successfully',
+          variant: 'success'
         });
         await loadKeys();
       } else {
         addToast({
           title: 'Error',
           description: result.error || 'Failed to rotate API key',
-          variant: 'destructive'
+          variant: 'error'
         });
       }
     } catch (error) {
@@ -147,7 +149,7 @@ export function KeyManagement() {
       addToast({
         title: 'Error',
         description: 'Failed to rotate API key',
-        variant: 'destructive'
+        variant: 'error'
       });
     }
   };

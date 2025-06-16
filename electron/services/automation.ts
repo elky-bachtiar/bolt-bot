@@ -29,14 +29,14 @@ class AutomationService {
 
       const page = await browser.newPage();
       
-      // Set viewport and user agent through context options
+      // Set viewport and user agent
       await page.setViewportSize({ width: 1920, height: 1080 });
       await page.setExtraHTTPHeaders({
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
       });
 
       // Navigate to Bolt.new
-      await page.goto('https://bolt.new', { waitUntil: 'networkidle' });
+      await page.goto('https://bolt.new', { waitUntil: 'domcontentloaded' });
 
       const session: AutomationSession = {
         id: `session-${Date.now()}`,
@@ -88,8 +88,14 @@ class AutomationService {
       const chatInput = await page.locator('[data-testid="chat-input"], textarea, input[type="text"]').first();
       
       // Clear existing content and type the command
-      await chatInput.click({ clickCount: 3 }); // Triple click to select all
-      await page.keyboard.press('Backspace'); // Clear selection
+      await chatInput.click();
+      await page.evaluate(() => {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(document.body);
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+      });
       await chatInput.fill(command);
 
       // Submit the command
@@ -218,8 +224,10 @@ class AutomationService {
   async shutdown(): Promise<void> {
     console.log('Shutting down automation service...');
     
-    for (const session of this.sessions.values()) {
-      await this.cleanup(session.id);
+    // Close all active sessions
+    const sessionIds = Array.from(this.sessions.keys());
+    for (const id of sessionIds) {
+      await this.closeSession(id);
     }
     
     this.sessions.clear();

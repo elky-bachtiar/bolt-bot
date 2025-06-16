@@ -9,11 +9,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    rollupOptions: {
+      external: ['sonner']
+    }
   },
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
+    alias: [
+      { find: '@', replacement: path.resolve(__dirname, './src') },
+      { find: '@workspace', replacement: path.resolve(__dirname, '../../packages') }
+    ]
   },
   optimizeDeps: {
     exclude: ['lucide-react'],
@@ -22,4 +26,7 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
   },
+  define: {
+    'process.env': {}
+  }
 });

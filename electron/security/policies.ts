@@ -1,8 +1,10 @@
 import { BrowserWindow, session } from 'electron';
+import type { Session } from 'electron';
 
 export function setupSecurityPolicies(window: BrowserWindow): void {
   // Content Security Policy
-  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+  const ses = session.defaultSession;
+  ses.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
@@ -22,8 +24,12 @@ export function setupSecurityPolicies(window: BrowserWindow): void {
     });
   });
 
-  // Note: New window handling is now managed in main.ts using setWindowOpenHandler
-  
+  // Handle new window creation
+  window.webContents.setWindowOpenHandler(({ url }) => {
+    // Prevent all new windows
+    return { action: 'deny' };
+  });
+
   // Prevent navigation to external URLs
   window.webContents.on('will-navigate', (event, navigationUrl) => {
     const parsedUrl = new URL(navigationUrl);

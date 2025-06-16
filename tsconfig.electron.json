@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "es2022",
     "target": "ES2022",
     "moduleResolution": "node",
     "outDir": "./dist/electron",
@@ -9,10 +9,18 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "downlevelIteration": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./electron/types"
+    ]
   },
   "include": [
-    "electron/**/*"
+    "electron/**/*.ts",
+    "electron/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

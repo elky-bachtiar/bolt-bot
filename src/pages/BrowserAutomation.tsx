@@ -51,14 +51,15 @@ export function BrowserAutomation() {
       if (result.success) {
         addToast({
           title: 'Success',
-          description: 'Bolt.new opened successfully'
+          description: 'Bolt.new opened successfully',
+          variant: 'success'
         });
         await checkSessionStatus();
       } else {
         addToast({
           title: 'Error',
           description: result.error || 'Failed to open Bolt.new',
-          variant: 'destructive'
+          variant: 'error'
         });
       }
     } catch (error) {
@@ -66,7 +67,7 @@ export function BrowserAutomation() {
       addToast({
         title: 'Error',
         description: 'Failed to open Bolt.new',
-        variant: 'destructive'
+        variant: 'error'
       });
     } finally {
       setIsLoading(false);
@@ -78,7 +79,7 @@ export function BrowserAutomation() {
       addToast({
         title: 'Validation Error',
         description: 'Please enter a command to execute',
-        variant: 'destructive'
+        variant: 'warning'
       });
       return;
     }
@@ -87,7 +88,7 @@ export function BrowserAutomation() {
       addToast({
         title: 'Error',
         description: 'No active browser session. Please open Bolt.new first.',
-        variant: 'destructive'
+        variant: 'error'
       });
       return;
     }
@@ -99,7 +100,8 @@ export function BrowserAutomation() {
       if (result.success) {
         addToast({
           title: 'Success',
-          description: 'Command executed successfully'
+          description: 'Command executed successfully',
+          variant: 'success'
         });
         
         setExecutionHistory(prev => [{
@@ -113,7 +115,7 @@ export function BrowserAutomation() {
         addToast({
           title: 'Error',
           description: result.error || 'Failed to execute command',
-          variant: 'destructive'
+          variant: 'error'
         });
         
         setExecutionHistory(prev => [{
@@ -127,7 +129,7 @@ export function BrowserAutomation() {
       addToast({
         title: 'Error',
         description: 'Failed to execute command',
-        variant: 'destructive'
+        variant: 'error'
       });
     } finally {
       setIsExecuting(false);
@@ -141,14 +143,15 @@ export function BrowserAutomation() {
       if (result) {
         addToast({
           title: 'Success',
-          description: 'Browser session closed'
+          description: 'Session closed successfully',
+          variant: 'success'
         });
         setSessionStatus({ status: 'no-session' });
       } else {
         addToast({
           title: 'Error',
           description: 'Failed to close session',
-          variant: 'destructive'
+          variant: 'error'
         });
       }
     } catch (error) {
@@ -156,7 +159,7 @@ export function BrowserAutomation() {
       addToast({
         title: 'Error',
         description: 'Failed to close session',
-        variant: 'destructive'
+        variant: 'error'
       });
     }
   };
